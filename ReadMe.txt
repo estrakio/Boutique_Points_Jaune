@@ -1,0 +1,1 @@
+pour lancer le docker utilisé le bat nommé fulllaunch.bat

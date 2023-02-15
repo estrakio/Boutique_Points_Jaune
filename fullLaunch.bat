@@ -1,0 +1,1 @@
+docker-compose -p sitejaune -f docker-compose/docker-compose.yml up
