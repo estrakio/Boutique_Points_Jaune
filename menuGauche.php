@@ -1,4 +1,28 @@
+
 <!--
+// *----------------------------------------------------------------------*
+// *  PHP        : MenuGauche.php                                       *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page qui permet la mise à jour de points d'un                       *
+// *  salarié                                                             *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *  03/04/2023                                                          *
+// *  Ajout de l'annulation sur les commandes points bleues               *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
+
   <nav class="navbar navbar-expand-lg">
 
 <div class="container-fluid">
@@ -15,7 +39,7 @@
 -->
 </nav>
 
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg text_vert">
   <div class="container-fluid">
     <a class="navbar-brand text-center" href="index.php?content=accueil"><img src="../images/home_ rond.png" alt="" height="50"> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,18 +66,22 @@
         <?php if( isset($_SESSION['connect']['accesboutique'])){
                 if ($_SESSION['connect']['accesboutique'] ==="1"){
         ?>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item dropdown text_vert">
+          <a class="nav-link dropdown-toggle text_vert" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="../images/coteMag.png" alt="" height="50">
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu sous_menu">
             <li><a class="dropdown-item text-warning" href="index.php?content=caisse">Nouvelle commande (points jaunes)</a></li>
-            <li><a class="dropdown-item text-primary" href="index.php?content=caisseBleu">Nouvelle commande (points bleus)</a></li>
-            <li><a class="dropdown-item" href="index.php?content=annulerCommande">Annuler une commande</a></li>
+            <li><a class="dropdown-item text-primary" href="index.php?content=caisseBleu">Nouvelle commande (points bleus)</a></li>            
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-warning" href="index.php?content=listeCommande">Liste des commandes</a></li>
+            <li><a class="dropdown-item text-warning" href="index.php?content=annulerCommande">Annuler une commande (Points Jaunes)</a></li>
             <li><a class="dropdown-item text-warning" href="index.php?content=ajoutProduit">Gestion des produits (points Jaunes)</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-primary" href="index.php?content=listeCommandeBleu">Liste des commandes</a></li>
+            <li><a class="dropdown-item text-primary" href="index.php?content=annulerCommandeBleu">Annuler une commande (Points Bleus)</a></li>
             <li><a class="dropdown-item text-primary" href="index.php?content=ajoutProduitBleu">Gestion des produits (points Bleus)</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="index.php?content=listeCommande">Liste des commandes</a></li>
             <li><a class="dropdown-item" href="index.php?content=gestionUsers">Liste des Salariés</a></li>
             <li><a class="dropdown-item" href="index.php?content=matricule">Rechercher un matricule</a></li>
             <li><a class="dropdown-item" href="index.php?content=extraction_data">Extraction de données</a></li>
@@ -66,14 +94,15 @@
                 if ($_SESSION['connect']['accesrh'] ==="1"){
         ?>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle text_vert"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="../images/coteRh.png" alt="" height="50">
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu sous_menu">
             <li><a class="dropdown-item" href="index.php?content=ajoutPoints">Ajout de points globals</a></li>
             <li><a class="dropdown-item" href="index.php?content=majUsers">Mise à jour des salariés</a></li>
             <li><a class="dropdown-item" href="index.php?content=pointsManuel">Ajout de points par matricule</a></li>
-            <li><a class="dropdown-item" href="index.php?content=transfertPoints">Transfert des points physique</a></li>
+            <!-- Désactivation de la page ci-dessous car elle n'a jamais eu pour but de rester dans le temps  -->
+            <!-- <li><a class="dropdown-item" href="index.php?content=transfertPoints">Transfert des points physique</a></li> -->
             <li><a class="dropdown-item" href="index.php?content=gestionUsers">Liste des salariés</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="index.php?content=matricule">Rechercher un matricule</a></li>
@@ -89,11 +118,12 @@ if( isset($_SESSION['connect']['accesrh']) ){
   if ($_SESSION['connect']['accesrh'] ==="1" && $_SESSION['connect']['accesboutique'] ==="1"){
     ?>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle text_vert" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="../images/admin.png" alt="" height="50">
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="index.php?content=historique">Historique des transactions</a></li>
+            <li><a class="dropdown-item text-warning" href="index.php?content=historique">Historique des transactions (POINTS JAUNES)</a></li>
+            <li><a class="dropdown-item text-primary" href="index.php?content=historique_bleu">Historique des transactions (POINTS BLEUES)</a></li>
             <li><a class="dropdown-item" href="index.php?content=ajoutUser">Ajouter un utilisateur</a></li>
             <li><a class="dropdown-item" href="index.php?content=mdpUsers">Gérer un compte utilisateur</a></li>
           </ul>

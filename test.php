@@ -1,165 +1,400 @@
 <?php
-//echo ("<pre>");
-//var_dump($_POST);
-//echo ("</pre>");
-//_______________________________________________________________________________________________________________________________________
 
-$conn = connectionSql();
-$sql = "select * from historique where operation = 'vente de jus';";
-$tab_historique_jaune = pg_fetch_all(pg_query($conn, $sql));
-$sql = "select * from historiquebleu where operation = 'vente de jus';";
-$tab_historique_bleu = pg_fetch_all(pg_query($conn, $sql));
-$sql = "table produits;";
-$tab_produits_jaune = pg_fetch_all(pg_query($conn, $sql));
-$sql = "table produitsbleu;";
-$tab_produits_bleu = pg_fetch_all(pg_query($conn, $sql));
-$tab_final = [];
-//_______________________________________________________________________________________________________________________________________
+// *----------------------------------------------------------------------*
+// *  PHP        : test.php                                               *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page de test pour les modifications                                 *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
 
-function filtre_date_mois($table, $filtre_du, $filtre_au)
-{
-    $donnees = [];
-    $du = strtotime($filtre_du);
-    $au = strtotime($filtre_au);
-    foreach ($table as $ligne_historique) {
-        $split_date = explode(" ", $ligne_historique["date"]);
-        $date_ligne = strtotime($split_date[0]);
-        if ($date_ligne >= $du && $date_ligne <= $au) {
-            array_push($donnees, $ligne_historique);
-        }
-    }
-    return $donnees;
+
+echo ("<pre>");
+var_dump($_POST);
+echo ("</pre>");
+
+echo "PANIER : ";
+echo ("<pre>");
+var_dump($_SESSION["panier"]);
+echo ("</pre>");
+
+
+
+
+
+// Fin du traitement de la commande.
+if (isset($_POST["commande_terminer"])) {
+
+  echo ('<div class="row">');
+  echo ('<div class="text-center text-success h3">');
+  echo ('<p style="margin-top:5vh;"> Commande validée ! 
+        <br>  Le matricule ' . $_POST["matricule"] . ' a bien été déduit de ' . $_POST["cout"] . ' points
+        <br> Son nouveau solde s\'élève à ' . $_POST["point"] . ' points
+        </p>');
+  echo ('</div>');
+  echo ('</div>');
 }
-//_______________________________________________________________________________________________________________________________________
-?>
+
+if (!empty($_POST["etape"])) {
+  if ($_POST["etape"] === "1") {
+    $test = "matricule  = '" . strval($_POST["matricule"]) . "'";
+
+    //echo("<pre>");    
+    //var_dump(tableSqlWhere("salarie", $test));
+    //echo("</pre>");
+    if (empty(tableSqlWhere("salarie", $test))) {
+      unset($_POST["etape"]);
+      echo ('<div class="row text-center text-danger h3">');
+      echo ("<b style='margin-top:5vh;'> Le matricule saisi n'existe pas </b>");
+      echo ('</div>');
+    }
+  }
+}
 
 
-<div class="row">
+//  Début d'une procédure de commande.
+if (empty($_POST["etape"])) {
+
+  // Ajout WK 20/03/2023
+  if (!isset($_SESSION["panier"])) {
+    $_SESSION["panier"] = array();
+  }
+  ?>
+  <div>
+    <br>
+    <div class="text-center">
+      <b class="text-warning">Système d'encaissement des points jaunes</b>
+      <br>
+      <br>
+      <p>
+        cette page vous permet d'encaisser les commandes de produits coûtant uniquement des points jaunes
+      </p>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-3 "></div>
     <div class="col-6">
-        <form action="index.php?content=test" method="post" id="historique">
-            <br>
-            <div class="row">
-                <div class="col-6">
-                    <label for="id">de la date :</label>
-                    <input type="date" class="form-control" name="date_du" required>
-                </div>
-                <div class="col-6">
-                    <label for="id">à la date :</label>
-                    <input type="date" class="form-control" name="date_au" required>
-                </div>
-                <br>
-                <div class="col-8 text-center">
-                    <br>
-                    <label>Sur quel type de points souhaitiez vous faire l'extraction ? </label>
-                    <br>
-                    <br>
-                </div>
-                <br>
-                <div class="row">
-                    <div class=" col-4">
-                        <input class="form-check-input" type="radio" name="check_bleu_jaune" id="inlineRadio1"
-                            value="historiquebleu" checked>
-                        <label class="form-check-label" for="inlineRadio1">Points bleues</label>
-                    </div>
-                    <div class=" col-4">
-                        <input class="form-check-input" type="radio" name="check_bleu_jaune" id="inlineRadio2"
-                            value="historique">
-                        <label class="form-check-label" for="inlineRadio2">Points jaunes</label>
-                    </div>
-                </div>
-        </form>
-        <div class="text-center">
-            <br><br>
-            <button class="btn btn-secondary btn-lg" type="submit" form="historique" value="Submit">Valider</button>
-            <br><br>
+      <form action="index.php?content=test" method="post" id="formMatricule">
+        <input hidden value="1" name="etape" id="etape">
+        <br>
+        <div>
+          <label for="matricule">Veuillez saisir le matricule : </label>
+          <input type="text" class="form-control" placeholder="matricule" name="matricule" required>
         </div>
+        <br>
+      </form>
+      <div class="text-center">
+        <button class="btn btn-secondary btn-lg" type="submit" form="formMatricule" value="Submit">Valider</button>
+        <br><br>
+      </div>
     </div>
     <div class="col-3"></div>
-</div>
+  </div>
+  <?php
 
-<?php
-if (isset($_POST["check_bleu_jaune"])) {
-    if ($_POST["check_bleu_jaune"] == "historique") {
-        $tab_histo_filtre = filtre_date_mois($tab_historique_jaune, $_POST["date_du"], $_POST["date_au"]);
-    } elseif ($_POST["check_bleu_jaune"] == "historiquebleu") {
-        $tab_histo_filtre = filtre_date_mois($tab_historique_bleu, $_POST["date_du"], $_POST["date_au"]);
-    }
 
-    $ligne_enregistrement = [];
-
-    foreach ($tab_histo_filtre as $ligne) {
-        $z = substr($ligne["detail"], 0, -1);
-        $detail = explode("/", $z);
-
-        foreach ($detail as $element) {
-            $ligne_article = explode(";", $element);
-            $code_sap = $ligne_article[0];
-            $total_points = $ligne_article[1];
-            $a = 0;
-            foreach ($ligne_enregistrement as &$data) {
-                foreach ($data as $key => &$value) {
-                    if ($key == $code_sap) {
-                        $value += intval($total_points);
-                        $a = 1;
+  // Condition validé lorsqu'un matricule valide et renseigné
+} elseif ($_POST["etape"] === "1") {
+  if (isset($_POST["vide"])) {
+    ?>
+    <div class="row">
+      <div class="text-center text-danger ">
+        <b>La commande ne contient aucun produit, <br> merci d'en saisir grâce au tableau ci-dessous</b>
+      </div>
+    </div>
+    <?php
+  }
+  $where = "matricule  = '" . $_POST["matricule"] . "'";
+  $salarie = tableSqlWhere("salarie", $where);
+  salarie_caisse($salarie, "Salariés :");
+  $table = tableSqlSProduitsActif();
+  ?>
+  <div class="row text-center  h3">
+    <b style="margin-top:5vh;">Listes des produits</b>
+  </div>
+  <div class="row">
+    <div>
+      <form action="/index.php?content=test" method="post" id="majActif">
+        <input hidden value="2" name="etape" id="etape">
+        <input hidden value="<?php echo ($_POST['matricule']) ?>" name="matricule" id="matricule">
+        <table class="table table-striped table-dark h5">
+          <thead class="thead-dark">
+            <tr>
+              <?php
+              foreach ($table as $ligne) {
+                if (next($table)) {
+                } else {
+                  foreach ($ligne as $champ => $value) {
+                    //echo($champ);
+                    if ($champ === "actif") {
+                      echo ("<th scope='col'> quantité (en carton)</th>");
+                    } elseif ($champ === "codeabap") {
+                      echo ("<th scope='col'> code SAP</th>");
+                    } else {
+                      echo ("<th scope='col'>" . $champ . "</th>");
                     }
+                  }
                 }
+              } ?>
+            </tr>
+          </thead>
+
+          <tbody>
+            <?php
+            echo ('<div class="row">');
+            foreach ($table as $ligne) {
+              echo ("<tr>");
+              foreach ($ligne as $champ => $value) {
+                //echo($champ);
+                if ($champ === "id") {
+                  $id = $value;
+                }
+                if ($champ === "actif") {
+                  echo ('<td>');
+                  if (isset($_POST["modification"])) {
+                    foreach ($_POST as $key => $value) {
+                      if ($key != "modification" and $key != "matricule" and $key != "etape") {
+                        $id_post = explode("_", $key);
+                        if (strval($id_post[1]) == strval($id)) {
+                          echo ('<input type="number" class="form-control" value="'.$value.'" name="produit_' . strval($id) . '">');
+                        }
+                      }
+                    }
+                  } else {
+                    echo ('<input type="number" class="form-control" value="0" name="produit_' . strval($id) . '">');
+                  }
+                  echo ('</td>');
+                } else {
+                  echo ("<td>" . $value . "</td>");
+                }
+              }
+              echo ("</tr>");
             }
-            if ($a == 0) {
-                $b = array($code_sap => $total_points);
-                array_push($ligne_enregistrement, $b);
-            }
+            echo ('</tbody>');
+            echo ('</table>');
+            echo ('</form>');
+            echo ('<div class="text-center">
+                        <button class="btn btn-secondary btn-lg" type="submit" form="majActif" value="Submit">Valider la commande</button>
+                        <br><br>
+                        </div>');
+            echo ('</div>');
+            echo ('</div>');
+
+
+  // Condition lorsqu'on arrive au moment du récapitulatif (étape 2)
+} elseif ($_POST["etape"] === "2") {
+  $tableauRecap = array();
+  $totalPoint = 0;
+  $verification_commande = 0;
+  $taille_post = count($_POST) - 2;
+  foreach ($_POST as $champ => $valeur) {
+    if ($champ != "etape" or $champ != "matricule") {
+      if ($valeur == 0) {
+        $verification_commande += 1;
+      }
+    }
+  }
+  if ($verification_commande == $taille_post) {
+    ?>
+              <script>
+                form = document.createElement("form");
+                form.action = "/index.php?content=test";
+                form.method = "post";
+                form.innerHTML = '<input type="hidden" name="etape" value="1">' +
+                  '<input type="hidden" name="vide" value="oui">' +
+                  '<input type="hidden" name="matricule" value="<?php echo ($_POST["matricule"]); ?>">';
+                document.body.appendChild(form);
+                form.submit();
+              </script>
+              <?php
+  }
+  foreach ($_POST as $champ => $valeur) {
+    if ($champ === "etape") {
+    } elseif ($champ === "matricule") {
+    } else {
+      $idProduit = explode("_", $champ);
+      $tabCondition = array(
+        "id" => intval($idProduit[1]),
+      );
+      $data = ["id", "codeabap", "nomproduit", "valpointsjaune", "col"];
+      $ligne = selectSql("produits", $tabCondition, $data);
+      array_push($tableauRecap, $ligne);
+    }
+  }
+  $tableauAffichage = [];
+  $detail = "";
+  //echo("<pre>");
+  //var_dump($tableauRecap);
+  //echo("</pre>");
+
+  //for ($i=0; $i < sizeof($tableauRecap); $i++) {
+  foreach ($tableauRecap as &$ligne) {
+    foreach ($ligne as $champ => &$valeurs) {
+      if ($champ === "id") {
+        $idLigne = $valeurs;
+      }
+      if ($champ === "valpointsjaune") {
+        $total = intval($valeurs) * intval($_POST["produit_" . $idLigne]);
+        //$tableauRecap[$i]["valpointsjaune"] = $total;
+        $valeurs = $total;
+        $totalPoint += $total;
+      }
+    }
+  }
+  $tableauAffichage = [];
+  $detail = "";
+  foreach ($tableauRecap as &$ligne) {
+    if ($ligne["valpointsjaune"] != "0") {
+
+      foreach ($_POST as $key => $value) {
+        if ($key != "etape" and $key != "matricule") {
+          $explosion = explode("_", $key);
+          $id_produit = $explosion[1];
+          if($ligne["id"] == $id_produit){
+            $quantite_choisi = $value;
+          }
         }
+      }
+      $b = array( 
+        "quantite"                  => $quantite_choisi,
+        "Code SAP"                  => $ligne["codeabap"],
+        "Nom du Produit"            => $ligne["nomproduit"],
+        "Points Jaune"              => $ligne["valpointsjaune"],
+        "Nombre de col par carton"  => $ligne["col"],
+      );
+      array_push($tableauAffichage, $b);
+      $detail = $detail . $ligne["codeabap"] . ";" . $ligne["valpointsjaune"] . "/";
     }
+  }
+  affichTable($tableauAffichage, "Récapitulatif commande");
+  $where = "matricule = '" . $_POST["matricule"] . "'";
+  $salarie = tableSqlWhere("salarie", $where);
+  $tableauFinal = array(
+    'nom'                           => $salarie[0]["nom"],
+    'prenom'                        => $salarie[0]["prenom"],
+    'matricule'                     => $salarie[0]["matricule"],
+    'points actuel possédé'         => $salarie[0]["nbrpoint"],
+    'total du caddie'               => $totalPoint,
+    'nouveau total'                 => $salarie[0]["nbrpoint"] - $totalPoint
+  );
+  $a = array($tableauFinal, );
+  tableau_recapitulatif_points($a, "Récaptitulatif points");
+  ?>
+            <div class="row">
 
-    $liste_data_magique = [];
-    echo ("<pre>");
-    var_dump($ligne_enregistrement);
-    echo ("</pre>");
-    for ($i=0; $i < count($ligne_enregistrement); $i++) { 
-        array_push($liste_data_magique, $ligne_enregistrement[$i]);
+              <div class="col-6 text-center">
+                <form action="index.php?content=test" method="post" id="form_retour_commande">
+                  <input hidden value="1" name="etape" id="etape">
+                  <input hidden value="1" name="modification" id="modification">
+                  <input hidden value="<?php echo ($salarie[0]["matricule"]); ?>" name="matricule" id="matricule">
+                  <?php
+                  foreach ($_POST as $key => $value) {
+                    // if ($key != "etape" and $key != "matricule" and $value != "0") {
+                    if ($key != "etape" and $key != "matricule") {
+                      echo ('<input hidden value="' . $value . '" name="' . $key . '" id="etape">');
+                    }
+                  }
+                  ?>
+                </form>
+                <div class="text-center">
+                  <button class="btn btn-danger btn-lg" type="submit" form="form_retour_commande" value="Submit">
+                    Modifier la commande
+                  </button>
+                  <br>
+                  <br>
+                </div>
+              </div>
 
-    }
-    echo ("<pre>");
-    var_dump($ligne_enregistrement[$i]);
-    echo ("</pre>");
+              <div class="col-6 text-center">
+                <form action="index.php?content=test" method="post" id="formValidationCommande">
+                  <input hidden value="3" name="etape" id="etape">
+                  <input hidden value="<?php echo ($salarie[0]["nbrpoint"]); ?>" name="pointActuel" id="pointActuel">
+                  <input hidden value="<?php echo ($salarie[0]["matricule"]); ?>" name="matricule" id="matricule">
+                  <input hidden value="<?php echo ($totalPoint); ?>" name="cout" id="cout">
+                  <input hidden value="<?php echo ($detail); ?>" name="detail" id="detail">
+                </form>
+                <div class="text-center">
+                  <button class="btn btn-warning btn-lg" type="submit" form="formValidationCommande" value="Submit">
+                    Valider la commande
+                  </button>
+                  <br>
+                  <br>
+                </div>
+              </div>
 
-    foreach ($ligne_enregistrement as $ligne_trop_cool) {
+            </div>
+            <?php
 
-        // echo ("<pre>");
-        // var_dump($ligne_trop_cool);
-        // echo ("</pre>");
+  // Condition lorsque la commande à été validé (étape 3)
+} elseif ($_POST["etape"] === "3") {
+  $point = $_POST["pointActuel"] - $_POST["cout"];
+  if ($point > -1) {
+    $sql = "UPDATE salarie SET nbrpoint = '" . $point . "' WHERE matricule = '" . $_POST["matricule"] . "';";
+    $conn = connectionSql();
+    pg_query($conn, $sql);
+    $valeurs = array(
+      'posneg' => "-",
+      'operation' => "vente de jus",
+      'valeur' => $_POST["cout"],
+      'beneficiaire' => $_POST["matricule"],
+      'detail' => $_POST["detail"],
+      'date' => (new DateTime("now", new DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s'),
+      'id_user' => $_SESSION["connect"]["id"],
+    );
+    insertSql("historique", $valeurs);
+    ?>
+              <script>
+                form = document.createElement("form");
+                form.action = "/index.php?content=test";
+                form.method = "post";
+                form.innerHTML = '<input type="hidden" name="commande_terminer" value="1">' +
+                  '<input type="hidden" name="cout" value="<?php echo ($_POST["cout"]); ?>">' +
+                  '<input type="hidden" name="point" value="<?php echo ($point); ?>">' +
+                  '<input type="hidden" name="matricule" value="<?php echo ($_POST["matricule"]); ?>">';
+                document.body.appendChild(form);
+                form.submit();
+              </script>
+              <?php
+              // echo ('<div class="row text-center text-success h3">');
+              // echo ('<b style="margin-top:5vh;"> Commande validée ! </b>');
+              // echo ('<b style="margin-top:5vh;"> Le matricule ' . $_POST["matricule"] . ' a bien été déduit de ' . $_POST["cout"] . ' points  </b>');
+              // echo ('<b style="margin-top:5vh;"> Suite à cette commande, il lui reste ' . $point . ' points </b>');
+              // echo ('</div>');
+              ?>
+              <!-- <div class="row">
+                                                                                                                                                                                    <div class="col-3 "></div>
+                                                                                                                                                                                    <div class="col-6">
+                                                                                                                                                                                        <form action="index.php?content=test" method="post" id="retourAudébut">
+                                                                                                                                                                                            <input hidden value="4" name="etape" id="etape">
+                                                                                                                                                                                        </form>
+                                                                                                                                                                                        <div class="text-center">
+                                                                                                                                                                                            <button class="btn btn-success btn-lg" type="submit" form="retourAudébut"
+                                                                                                                                                                                                value="Submit">Retourner à la saisie de matricule</button>
+                                                                                                                                                                                            <br><br>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                    <div class="col-3"></div>
+                                                                                                                                                                                </div> -->
+              <?php
+  } else {
+    echo ('<div class="row text-center text-danger h3">');
+    echo ('<b style="margin-top:5vh;"> ERREUR </b>');
+    echo ('<br>');
+    echo ('<b style="margin-top:5vh;"> La commande vaut plus de points que le total du salarié </b>');
+    echo ('</div>');
+  }
+} elseif ($_POST["etape"] === "4") {
+  unset($_POST["etape"]);
+  ?>
+            <script> location.replace("/index.php?content=test"); </script>
+            <?php
 
-        foreach ($ligne_trop_cool as $key => $value) {
-
-
-            if ($_POST["check_bleu_jaune"] == "historique") {
-                // echo("la key qui est passée par la est la $key. la valeur associé est $value<br>");
-                $sql = "select * from produits where codeabap = '" . $key . "';";
-                $nom_point = "valpointsjaune";
-            } elseif ($_POST["check_bleu_jaune"] == "historiquebleu") {
-                $sql = "select * from produitsbleu where codeabap = '" . $key . "';";
-                $nom_point = "valpointsbleu";
-            }
-
-            $ligne_produit = pg_fetch_assoc(pg_query($conn, $sql));
-
-            $qte_produit = intval($value / $ligne_produit["$nom_point"]);
-            $v = array(
-                "CODE SAP" => $key,
-                "LIBELLE ARTICLE" => $ligne_produit["nomproduit"],
-                "COL PAR CARTON" => $ligne_produit["col"],
-                "VALEURS UNITAIRE" => $ligne_produit["$nom_point"],
-                "QUANTITE TOTAL" => $qte_produit,
-                "TOTAL EN POINTS" => $value
-            );
-            array_push($tab_final, $v);
-        }
-    }
-    affichTable($tab_final, "RESULTAT");
-    // echo ("<pre>");
-    // var_dump($tab_final);
-    // echo ("</pre>");
 }
-
 ?>

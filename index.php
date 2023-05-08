@@ -1,4 +1,22 @@
 <?php
+
+// *----------------------------------------------------------------------*
+// *  PHP        : index.php                                              *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page qui contient le head, body et footer                           *
+// *  toutes les autres pages s'affiche dans le body                      *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
 session_start();
 date_default_timezone_set('UTC');
 include("fonction.php");

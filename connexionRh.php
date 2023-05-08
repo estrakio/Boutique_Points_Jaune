@@ -1,5 +1,22 @@
 <?php
 
+// *----------------------------------------------------------------------*
+// *  PHP        : connexionRh.php                                        *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Gestion du système d'encaissement du site (Points Bleu)             *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
+
 if(!empty($_SESSION["connect"]["accesrh"])){
     if($_SESSION["connect"]["accesrh"] === "1"){
         ?>  
@@ -15,23 +32,6 @@ if(!empty($_SESSION["connect"]["accesrh"])){
                 <br>
                 <br>
                 <img src="../images/rhImage.png" alt="" height = 400>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
         </div>
         <?php

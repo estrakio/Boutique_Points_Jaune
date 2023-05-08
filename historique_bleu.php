@@ -1,21 +1,21 @@
 <?php
 
 // *----------------------------------------------------------------------*
-// *  PHP        : historique.php                                         *
+// *  PHP        : historique_bleu.php                                         *
 // *  Site       : site-point-jaune                                       *
 // *  AUTEUR     : WALTER KARL                                            *
-// *  DATE       : 20/03/2023                                             *
+// *  DATE       : 24/03/2023                                             *
 // *  DATE       :                                                        *
 // *  BUT PAGE   : -------------------------------------------------------*
 // *                                                                      *
 // *  Page qui permet d'afficher la table Historique                      *
 // *----------------------------------------------------------------------*
-// *  MODIFICATIONS                                                       *
-// *                                                                      *
+// *  Création de la page                                                 *
+// *   WK 24/03/2023                                                      *
 // *                                                                      *
 // *----------------------------------------------------------------------*
 
 
-$data = tableSqlOrderById("historique");
+$data = tableSqlOrderById("historiqueBleu");
 
-affichTablePoints($data,"HISTORIQUE POINTS JAUNES");
+affichTablePoints($data,"HISTORIQUE POINTS BLEUES");

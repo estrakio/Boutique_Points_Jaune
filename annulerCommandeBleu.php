@@ -1,30 +1,33 @@
 <?php
 
 // *----------------------------------------------------------------------*
-// *  PHP        : annulerCommande.php                                    *
+// *  PHP        : annulerCommandeBleu.php                                *
 // *  Site       : site-point-jaune                                       *
 // *  AUTEUR     : WALTER KARL                                            *
-// *  DATE       : 20/03/2023                                             *
+// *  DATE       : 03/04/2023                                             *
 // *  DATE       :                                                        *
 // *  BUT PAGE   : -------------------------------------------------------*
 // *                                                                      *
-// *  Annulation des commandes déjâ passé sur les points jaunes           *
+// *  Annulation des commandes déjâ passé coté points bleu                *
 // *----------------------------------------------------------------------*
 // *  MODIFICATIONS                                                       *
 // *                                                                      *
 // *                                                                      *
 // *----------------------------------------------------------------------*
+
+// echo("<pre>");
+// var_dump($_POST);
+// echo("</pre>");
 ?>
 
 
-
+<!-- Création du formulaire demandant l'id de la commande à annulé -->
 <div class="row">
     <div class="col-3 "></div>
     <div class="col-6">
         <br>
-        <h5 class="text-center text-warning"> Annulation de commande point Jaunes</h5>
-
-        <form action="index.php?content=annulerCommande" method="post" id="annuleCommande">
+        <h5 class="text-center text-primary"> Annulation de commande point Bleu</h5>
+        <form action="index.php?content=annulerCommandeBleu" method="post" id="annuleCommande">
             <input hidden value="clients" name="content" id="content">
             <br>
             <div>
@@ -35,28 +38,29 @@
         </form>
         <div class="text-center">
             <button class="btn btn-secondary btn-lg" type="submit" form="annuleCommande" value="Submit">Valider</button>
-            <br><br>
+            <br>
+            <br>
         </div>
     </div>
-    <div class="col-3"></div>
+    <div class="col-3">
+    </div>
 </div>
 
 
 <?php
+// Demande de la validation de la supression de la commande.
 if (!empty($_POST["id_1"])) {
     ?>
     <div class="row">
         <div class="text-center text-danger">
-            <p>Voulez vous vraiment supprimer la commande
-                <?php echo ($_POST["id_1"]); ?> ?
-            </p>
-            <form action="index.php?content=annulerCommande" method="post" id="verif">
+            <p>Voulez vous vraiment supprimer la commande <?php echo($_POST["id_1"]); ?> ?</p>
+            <form action="index.php?content=annulerCommandeBleu" method="post" id="verif">
                 <input hidden value=1 name="validation" id="a">
                 <input hidden value=<?php echo ($_POST["id_1"]); ?> name="id" id="b">
                 <button type="submit" class="btn btn-outline-success btn-lg" form="verif" value="Submit">Oui</button>
             </form>
 
-            <form action="index.php?content=annulerCommande" method="post" id="pasDaccord">
+            <form action="index.php?content=annulerCommandeBleu" method="post" id="pasDaccord">
                 <input hidden value=1 name="nonon" id="a">
                 <button type="submit" class="btn btn-outline-danger btn-lg" form="pasDaccord" value="Submit">Non</button>
             </form>
@@ -70,9 +74,9 @@ if (!empty($_POST["id_1"])) {
 
 if (!empty($_POST["validation"])) {
     $test = 0;
-    $table = tableSql("historique");
+    $table = tableSql("historiqueBleu");
     //echo("<pre>");
-    //var_dump($table);
+    //var_dump($table); 
     //echo("</pre>");
     foreach ($table as $ligne) {
         if ($ligne["id"] == $_POST["id"]) {
@@ -87,25 +91,16 @@ if (!empty($_POST["validation"])) {
             "id" => intval($_POST["id"]),
         );
         $data = ["valeur, beneficiaire, detail"];
-        $commande = selectSql("historique", $tabCondition, $data);
+        $commande = selectSql("historiqueBleu", $tabCondition, $data);
         //echo("<pre>");
         //var_dump($commande);
         //echo("</pre>");
 
-        $tabCondition = array(
-            "matricule" => $commande["beneficiaire"],
-        );
-        $data = ["id, nbrpoint"];
-        $salarie = selectSql("salarie", $tabCondition, $data);
-
-        $point = intval($salarie["nbrpoint"]) + intval($commande["valeur"]);
 
 
-        $sql = "UPDATE salarie SET nbrpoint = " . $point . " WHERE matricule = '" . $commande["beneficiaire"] . "';";
-        $conn = connectionSql();
-        pg_query($conn, $sql);
 
-        $sql = "DELETE FROM historique WHERE id = " . $_POST["id"] . ";";
+
+        $sql = "DELETE FROM historiqueBleu WHERE id = " . $_POST["id"] . ";";
         pg_query($conn, $sql);
 
         echo "<div class = ' row text-center text-success' >";
@@ -113,15 +108,15 @@ if (!empty($_POST["validation"])) {
         echo "</div>";
 
         $tableau = array(
-            "posneg" => "+",
-            "operation" => "annulation de commande",
-            "valeur" => intval($commande["valeur"]),
-            "beneficiaire" => $commande["beneficiaire"],
-            "detail" => $commande["detail"],
-            "date" => (new DateTime("now", new DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s'),
-            "id_user" => $_SESSION['connect']['id'],
+            "posneg"        => "+",
+            "operation"     => "annulation de commande",
+            "valeur"        => intval($commande["valeur"]),
+            "beneficiaire"  => $commande["beneficiaire"],
+            "detail"        => $commande["detail"],
+            "date"          => (new DateTime("now", new DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s'),
+            "id_user"       => $_SESSION['connect']['id'],
         );
-        insertSql("historique", $tableau);
+        insertSql("historiqueBleu", $tableau);
 
 
     } else {
@@ -136,7 +131,7 @@ if (!empty($_POST["validation"])) {
 }
 $date = (new DateTime("now", new DateTimeZone('Europe/Paris')))->format('Y-m-d');
 $conn = connectionSql();
-$sql = "SELECT * FROM historique  where operation = 'vente de jus' ORDER BY id DESC;";
+$sql = "SELECT * FROM historiqueBleu  where operation = 'vente de jus' ORDER BY id DESC;";
 $table_historique = pg_fetch_all(pg_query($conn, $sql));
 $historique_ajd = [];
 foreach ($table_historique as $ligne) {
@@ -145,5 +140,5 @@ foreach ($table_historique as $ligne) {
         array_push($historique_ajd, $ligne);
     }
 }
-affichTablePoints($historique_ajd, "HISTORIQUE COMMANDE JAUNES");
-?>
+affichTablePoints($historique_ajd, "HISTORIQUE COMMANDES BLEUES");
+?>  

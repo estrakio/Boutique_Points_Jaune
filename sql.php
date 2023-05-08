@@ -1,4 +1,21 @@
 <?php
+
+// *----------------------------------------------------------------------*
+// *  PHP        : sql.php                                                *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page de création des tables et fonction SQL                         *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
     include "connectSql.php";
     $conn = connectionSql();
 
@@ -207,7 +224,7 @@ $sql .= "CREATE TABLE IF NOT EXISTS historiqueBleu(
     function tableSqlSProduitsActif(){
 
         $conn = connectionSql();
-        $sql = "SELECT * FROM produits WHERE actif = '1' ORDER BY codeabap DESC;"; 
+        $sql = "SELECT * FROM produits WHERE actif = '1' ORDER BY nomproduit ASC;"; 
 
         return(pg_fetch_all(pg_query($conn, $sql)));
     }
@@ -215,7 +232,7 @@ $sql .= "CREATE TABLE IF NOT EXISTS historiqueBleu(
     function tableSqlSProduitsActifBleu(){
 
         $conn = connectionSql();
-        $sql = "SELECT * FROM produitsBleu WHERE actif = '1' ORDER BY id ASC;"; 
+        $sql = "SELECT * FROM produitsBleu WHERE actif = '1' ORDER BY nomproduit ASC;"; 
 
         return(pg_fetch_all(pg_query($conn, $sql)));
     }

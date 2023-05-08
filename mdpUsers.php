@@ -1,23 +1,43 @@
 <?php
 
+// *----------------------------------------------------------------------*
+// *  PHP        : mdpUsers.php                                           *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page qui permet la modification des mot de passe user               *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *  Ajout du tri par ordre alphabétique sur les noms                    *
+// *  03/04/2023  WK                                                      *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
 //echo"<pre>";
 //var_dump($_POST);
 //echo"<pre>";
 
 $tableau_utilisateur = [];
 $conn = connectionSql();
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM users ORDER BY nom ASC";
 $result = pg_fetch_all(pg_query($conn, $sql));
 foreach ($result as $ligne_utilisateur) {
     $utilisateur = array(
-                    "id" => $ligne_utilisateur["id"],
-                    "nom" => $ligne_utilisateur["nom"],
-                    "prenom" => $ligne_utilisateur["prenom"],
-                    "poste occupé" => $ligne_utilisateur["poste"],
-                    "login" => $ligne_utilisateur["login"],
-                    "mot de passe" => $ligne_utilisateur["mdp"],
-                    "accès Ressource Humaine" => $ligne_utilisateur["accesrh"],
-                    "accès Boutique" => $ligne_utilisateur["accesboutique"],
+                    "id"                        => $ligne_utilisateur["id"],
+                    "nom"                       => $ligne_utilisateur["nom"],
+                    "prenom"                    => $ligne_utilisateur["prenom"],
+                    "poste occupé"              => $ligne_utilisateur["poste"],
+                    "login"                     => $ligne_utilisateur["login"],
+                    "mot de passe"              => $ligne_utilisateur["mdp"],
+                    "accès Ressource Humaine"   => $ligne_utilisateur["accesrh"],
+                    "accès Boutique"            => $ligne_utilisateur["accesboutique"],
     );
     array_push($tableau_utilisateur, $utilisateur);
 }

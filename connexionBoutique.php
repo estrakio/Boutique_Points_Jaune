@@ -1,5 +1,22 @@
 <?php
 
+// *----------------------------------------------------------------------*
+// *  PHP        : connexionBoutique.php                                  *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page d'accueil si connecté avec un compte Boutique                  *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
+
     if(!empty($_SESSION["connect"]["accesboutique"])){
         if($_SESSION["connect"]["accesboutique"] === "1"){
             ?>  

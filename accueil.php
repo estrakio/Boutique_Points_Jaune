@@ -1,5 +1,21 @@
 <?php
 
+// *----------------------------------------------------------------------*
+// *  PHP        : accueil.php                                            *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Affichage par défaut du site post connexion                         *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
+
 // echo"<pre>";
 // var_dump($_SESSION);
 // echo"</pre>";
@@ -16,6 +32,9 @@ if (!empty($_SESSION)) {
     
     }
   }
+
+if (!empty($_SESSION["connect"])) {
+
   // Si la variable contient un accès au Ressource humaine lui affiche la page correspondante
   if($_SESSION["connect"]["accesrh"] === "1"){
     // remplace la page actuel par la page d'accueil dédié au RH
@@ -26,7 +45,7 @@ if (!empty($_SESSION)) {
     // remplace la page actuel par la page d'accueil dédié à la boutique 
     ?><script> location.replace("/index.php?content=connexionBoutique"); </script><?php
   }
-  
+}
 
 }
 ?>

@@ -1,4 +1,20 @@
 <?php
+
+// *----------------------------------------------------------------------*
+// *  PHP        : salarie_rechercher.php                                 *
+// *  Site       : site-point-jaune                                       *
+// *  AUTEUR     : WALTER KARL                                            *
+// *  DATE       : 20/03/2023                                             *
+// *  DATE       :                                                        *
+// *  BUT PAGE   : -------------------------------------------------------*
+// *                                                                      *
+// *  Page Inutile                                                        *
+// *----------------------------------------------------------------------*
+// *  MODIFICATIONS                                                       *
+// *                                                                      *
+// *                                                                      *
+// *----------------------------------------------------------------------*
+
     //echo("<pre>");
     //var_dump($_POST);
     //echo("</pre>");
@@ -19,8 +35,6 @@
             <div class="text-center">
                 <button class="btn btn-secondary btn-lg" type="submit" form="formMatricule" value="Submit">Valider</button>
                 <br><br>
-
-            
             </div>
         </div>
         <div class="col-3"></div>
@@ -32,7 +46,6 @@
             <th scope="col">NOM</th>
             <th scope="col">PRENOM</th>
             <th scope="col" >POINT JAUNE</th>
-
         </tr>
     </thead>
     <tbody>
